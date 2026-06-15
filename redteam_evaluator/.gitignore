@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Run logs (regenerable)
+logs/
+
+# GEPA optimizer state directories (regenerable, large, container-owned).
+# The optimized programs themselves (artifacts/*.json) are kept.
+artifacts/*.logs/
+
+# Dataset and generated eval outputs (large; not committed).
+# See README "Dataset" for how to obtain the source CSV. Place it at
+# data/RedTeam_FalsePositive_Analysis.csv before running.
+data/
+
+# OS / editor cruft
+.DS_Store
+*.swp

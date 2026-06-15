@@ -1,0 +1,11 @@
+# Keep the build context small. data/ is volume-mounted at runtime via
+# docker-compose, so it does not need to be baked into the image.
+data/
+logs/
+artifacts/*.logs/
+__pycache__/
+*.py[cod]
+.git/
+.gitignore
+.venv/
+venv/
