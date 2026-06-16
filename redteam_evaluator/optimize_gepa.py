@@ -18,6 +18,7 @@ from dspy_evaluator import (
     DEFAULT_API_BASE,
     DEFAULT_MODEL,
     SAFETY_JUDGE_PATH_ENV,
+    GatedSafetyEvaluator,
     SafetyEvaluator,
     configure_lm,
 )
@@ -100,6 +101,13 @@ def main():
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--out", default="artifacts/gepa_safety_judge.json")
+    ap.add_argument(
+        "--module",
+        choices=["gated", "safety"],
+        default="gated",
+        help="gated = two-stage refusal gate + safety judge (default); "
+        "safety = single safety judge",
+    )
     ap.add_argument("--auto", choices=["light", "medium", "heavy"], default="light")
     ap.add_argument("--max-metric-calls", type=int, default=None)
     ap.add_argument("--model", default=os.getenv("DSPY_MODEL", DEFAULT_MODEL))
@@ -123,7 +131,7 @@ def main():
         args.reflection_max_tokens,
     )
 
-    student = SafetyEvaluator()
+    student = GatedSafetyEvaluator() if args.module == "gated" else SafetyEvaluator()
     optimizer = dspy.GEPA(
         gepa_metric,
         auto=args.auto if args.max_metric_calls is None else None,
