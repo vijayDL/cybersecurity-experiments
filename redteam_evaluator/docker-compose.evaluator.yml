@@ -2,6 +2,7 @@ services:
   redteam-evaluator:
     build: .
     image: redteam-evaluator:dspy
+    container_name: redteam-evaluator
     network_mode: host
     environment:
       DSPY_API_BASE: "${DSPY_API_BASE:-http://localhost:47821/v1}"
@@ -12,3 +13,20 @@ services:
       - .:/app:rw
       - ./data:/app/data:rw
     command: ["python", "run_eval.py", "--calibrate", "20", "--workers", "4"]
+
+  redteam-evaluator-server:
+    build: .
+    image: redteam-evaluator:dspy
+    container_name: redteam-evaluator-server
+    network_mode: host
+    environment:
+      DSPY_API_BASE: "${DSPY_API_BASE:-http://localhost:47821/v1}"
+      DSPY_MODEL: "${DSPY_MODEL:-gemma-4-31B-it-NVFP4}"
+      OPENAI_API_KEY: "${OPENAI_API_KEY:-local}"
+      EVALUATOR_BACKEND: "dspy"
+      DSPY_SAFETY_JUDGE_PATH: "${DSPY_SAFETY_JUDGE_PATH:-artifacts/gepa_gated_judge.json}"
+      PORT: "${PORT:-47923}"
+    volumes:
+      - .:/app:rw
+      - ./data:/app/data:rw
+    command: ["python", "server.py"]

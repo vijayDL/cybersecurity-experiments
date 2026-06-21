@@ -1,2 +1,4 @@
 dspy>=3.0.0
 litellm>=1.74.0
+fastapi>=0.110.0
+uvicorn>=0.29.0
